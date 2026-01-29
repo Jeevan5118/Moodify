@@ -1,0 +1,38 @@
+<div class="mood-selector">
+  <div class="text-center mb-8">
+    <h2 class="text-3xl font-bold mb-4 dark:text-white">How are you feeling today?</h2>
+    <p class="text-lg text-gray-600 dark:text-gray-300">Select your mood and we'll create the perfect playlist for you</p>
+  </div>
+
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+    <div 
+      *ngFor="let mood of moods"
+      class="mood-card"
+      [class.selected]="isSelected(mood)"
+      (click)="selectMood(mood)"
+      [style.border-color]="mood.color">
+      
+      <div class="mood-emoji" [style.background-color]="mood.color + '20'">
+        <span class="text-4xl">{{ mood.emoji }}</span>
+      </div>
+      
+      <div class="mood-info">
+        <h3 class="mood-name dark:text-white">{{ mood.name }}</h3>
+        <p class="mood-description dark:text-gray-300">{{ mood.description }}</p>
+      </div>
+
+      <div class="selection-indicator" *ngIf="isSelected(mood)">
+        <span class="text-2xl">✓</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center mt-8" *ngIf="selectedMood">
+    <div class="inline-flex items-center space-x-2 bg-green-100 dark:bg-green-900 px-4 py-2 rounded-full">
+      <span class="text-green-600 dark:text-green-400">✓</span>
+      <span class="text-green-800 dark:text-green-200 font-medium">
+        {{ selectedMood.name }} mood selected!
+      </span>
+    </div>
+  </div>
+</div>

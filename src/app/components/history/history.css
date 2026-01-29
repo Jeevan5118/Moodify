@@ -1,0 +1,383 @@
+.history-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 0;
+}
+
+.history-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.history-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #1f2937;
+}
+
+.history-subtitle {
+  font-size: 1.125rem;
+  color: #6b7280;
+}
+
+.controls-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  gap: 1rem;
+}
+
+.search-container {
+  position: relative;
+  flex: 1;
+  max-width: 400px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 1rem;
+  background: white;
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.search-icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+.control-buttons {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.refresh-button {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.refresh-button:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+}
+
+.clear-button {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.clear-button:hover {
+  background: #dc2626;
+  transform: translateY(-1px);
+}
+
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.dark .error-message {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+.error-icon {
+  font-size: 1.25rem;
+  color: #ef4444;
+}
+
+.error-text {
+  color: #dc2626;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.dark .error-text {
+  color: #fca5a5;
+}
+
+.history-content {
+  min-height: 400px;
+}
+
+.no-results, .empty-history {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.no-results-text {
+  font-size: 1.125rem;
+  color: #6b7280;
+}
+
+.empty-history {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.empty-icon {
+  font-size: 4rem;
+  opacity: 0.5;
+}
+
+.empty-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.empty-description {
+  font-size: 1rem;
+  color: #6b7280;
+  max-width: 400px;
+  line-height: 1.5;
+}
+
+.history-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+.history-card {
+  background: white;
+  border: 2px solid transparent;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.dark .history-card {
+  background: #1f2937;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.history-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.dark .history-card:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+.history-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.mood-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.mood-emoji {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.mood-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: #1f2937;
+}
+
+.mood-description {
+  font-size: 0.875rem;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+.card-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.replay-button, .delete-button {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.replay-button {
+  background: #10b981;
+  color: white;
+}
+
+.replay-button:hover {
+  background: #059669;
+  transform: scale(1.1);
+}
+
+.delete-button {
+  background: #ef4444;
+  color: white;
+}
+
+.delete-button:hover {
+  background: #dc2626;
+  transform: scale(1.1);
+}
+
+.playlist-preview {
+  margin-bottom: 1rem;
+}
+
+.preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.song-count {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.confidence-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: white;
+}
+
+.songs-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.song-preview {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  background: #f9fafb;
+  border-radius: 8px;
+}
+
+.dark .song-preview {
+  background: #374151;
+}
+
+.song-title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.song-artist {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.more-songs {
+  text-align: center;
+  padding: 0.5rem;
+}
+
+.more-text {
+  font-size: 0.875rem;
+  font-style: italic;
+}
+
+.card-footer {
+  border-top: 1px solid #e5e7eb;
+  padding-top: 1rem;
+  text-align: center;
+}
+
+.dark .card-footer {
+  border-color: #374151;
+}
+
+.timestamp {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .controls-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .search-container {
+    max-width: none;
+  }
+  
+  .history-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .history-card {
+    padding: 1rem;
+  }
+  
+  .mood-emoji {
+    width: 40px;
+    height: 40px;
+    font-size: 1.25rem;
+  }
+  
+  .mood-name {
+    font-size: 1.125rem;
+  }
+}

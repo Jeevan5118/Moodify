@@ -1,0 +1,131 @@
+<app-header></app-header>
+
+<div class="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 dark:from-gray-900 dark:to-gray-800">
+  <div class="container mx-auto px-4 py-8">
+    <div class="text-center mb-8">
+      <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+        Your Saved Playlists 🎵
+      </h1>
+      <p class="text-xl text-gray-600 dark:text-gray-300">
+        All your saved mood-based playlists in one place
+      </p>
+    </div>
+
+    <!-- Search and Controls -->
+    <div class="max-w-2xl mx-auto mb-8">
+      <div class="flex gap-4 items-center">
+        <div class="relative flex-1">
+          <input 
+            type="text" 
+            placeholder="Search playlists, moods, or songs..."
+            [(ngModel)]="searchTerm"
+            class="w-full px-4 py-3 pl-12 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+          <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">🔍</span>
+        </div>
+        <button 
+          (click)="refreshPlaylists()"
+          class="px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">
+          🔄 Refresh
+        </button>
+      </div>
+    </div>
+
+    <!-- Error Message -->
+    <div *ngIf="errorMessage" class="max-w-2xl mx-auto mb-8">
+      <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 flex items-center gap-3">
+        <div class="text-red-500 text-xl">⚠️</div>
+        <p class="text-red-700 dark:text-red-300">{{ errorMessage }}</p>
+      </div>
+    </div>
+
+    <!-- Playlists Content -->
+    <div class="max-w-6xl mx-auto">
+      <!-- Loading State -->
+      <div *ngIf="isLoading" class="text-center py-12">
+        <div class="text-4xl mb-4 animate-spin">🔄</div>
+        <p class="text-gray-600 dark:text-gray-400">Loading your playlists...</p>
+      </div>
+
+      <!-- No Results -->
+      <div *ngIf="!isLoading && getFilteredPlaylists().length === 0 && playlists.length > 0" class="text-center py-12">
+        <div class="text-4xl mb-4">🔍</div>
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">No Results Found</h3>
+        <p class="text-gray-600 dark:text-gray-400">No playlists match "{{ searchTerm }}"</p>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="!isLoading && playlists.length === 0 && !errorMessage" class="text-center py-12">
+        <div class="text-6xl mb-4">🎵</div>
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">No Saved Playlists</h3>
+        <p class="text-gray-600 dark:text-gray-400">
+          You haven't saved any playlists yet. Generate a playlist and save it to see it here!
+        </p>
+      </div>
+
+      <!-- Playlists Grid -->
+      <div *ngIf="!isLoading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div 
+          *ngFor="let playlist of getFilteredPlaylists()"
+          class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+          
+          <!-- Playlist Header -->
+          <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+            <div class="flex items-center space-x-3 mb-4">
+              <div class="text-3xl">{{ playlist.mood.emoji }}</div>
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ playlist.mood.name }}</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-300">{{ playlist.mood.description }}</p>
+              </div>
+              <button (click)="removePlaylist(playlist)" title="Remove Playlist" class="ml-auto text-red-500 hover:text-red-700 bg-transparent border-none p-1 rounded-full transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            
+            <!-- Playlist Info -->
+            <div class="flex items-center justify-between text-xs text-gray-600 dark:text-gray-400">
+              <span>{{ getSongCount(playlist.songs) }}</span>
+              <span>{{ calculateTotalDuration(playlist.songs) }}</span>
+            </div>
+          </div>
+
+          <!-- Songs Preview -->
+          <div class="p-6">
+            <div class="space-y-2">
+              <div 
+                *ngFor="let song of playlist.songs.slice(0, 3)"
+                class="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded">
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-medium text-gray-900 dark:text-white truncate">{{ song.title }}</p>
+                  <p class="text-xs text-gray-600 dark:text-gray-400 truncate">{{ song.artist }}</p>
+                </div>
+                <div class="flex items-center space-x-2 ml-2">
+                  <span class="text-xs text-gray-500 dark:text-gray-400">{{ song.duration }}</span>
+                  <button
+                    *ngIf="song.link"
+                    (click)="openSongLink(song.link!)"
+                    class="text-purple-600 hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-300">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"></path>
+                      <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              
+              <div *ngIf="playlist.songs.length > 3" class="text-center pt-2">
+                <span class="text-xs text-gray-500 dark:text-gray-400">+{{ playlist.songs.length - 3 }} more songs</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Footer -->
+          <div class="px-6 py-3 bg-gray-50 dark:bg-gray-700">
+            <span class="text-xs text-gray-500 dark:text-gray-400">{{ formatDate(playlist.timestamp) }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

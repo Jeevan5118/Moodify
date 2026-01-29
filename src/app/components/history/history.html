@@ -1,0 +1,127 @@
+<div class="history-container">
+  <div class="history-header">
+    <h2 class="history-title dark:text-white">Your Mood History</h2>
+    <p class="history-subtitle dark:text-gray-300">Revisit your previous mood-based playlists</p>
+  </div>
+
+  <!-- Search and Controls -->
+  <div class="controls-section">
+    <div class="search-container">
+      <input 
+        type="text" 
+        placeholder="Search moods or songs..."
+        [(ngModel)]="searchTerm"
+        class="search-input dark:bg-gray-700 dark:text-white dark:border-gray-600">
+      <span class="search-icon">🔍</span>
+    </div>
+    
+    <div class="control-buttons">
+      <button 
+        class="refresh-button"
+        (click)="refreshHistory()"
+        title="Refresh history">
+        🔄 Refresh
+      </button>
+      
+      <button 
+        *ngIf="history.length > 0"
+        class="clear-button"
+        (click)="clearHistory()">
+        🗑️ Clear All
+      </button>
+    </div>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="errorMessage" class="error-message">
+    <div class="error-icon">⚠️</div>
+    <p class="error-text">{{ errorMessage }}</p>
+  </div>
+
+  <!-- History List -->
+  <div class="history-content">
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-state">
+      <div class="loading-spinner">🔄</div>
+      <p class="loading-text dark:text-gray-400">Loading your history...</p>
+    </div>
+
+    <div *ngIf="!isLoading && getFilteredHistory().length === 0 && history.length > 0" class="no-results">
+      <p class="no-results-text dark:text-gray-400">No results found for "{{ searchTerm }}"</p>
+    </div>
+
+    <div *ngIf="!isLoading && history.length === 0 && !errorMessage" class="empty-history">
+      <div class="empty-icon">📝</div>
+      <h3 class="empty-title dark:text-white">No History Yet</h3>
+      <p class="empty-description dark:text-gray-300">
+        Your saved playlists will appear here. Start by selecting a mood and saving a playlist!
+      </p>
+    </div>
+
+    <div *ngIf="!isLoading" class="history-grid">
+      <div 
+        *ngFor="let item of getFilteredHistory()"
+        class="history-card"
+        [style.border-color]="item.mood.color">
+        
+        <div class="history-card-header">
+          <div class="mood-info">
+            <div class="mood-emoji" [style.background-color]="item.mood.color + '20'">
+              {{ item.mood.emoji }}
+            </div>
+            <div class="mood-details">
+              <h3 class="mood-name dark:text-white">{{ item.mood.name }}</h3>
+              <p class="mood-description dark:text-gray-300">{{ item.mood.description }}</p>
+            </div>
+          </div>
+          
+          <div class="card-actions">
+            <button 
+              class="replay-button"
+              (click)="replayMood(item)"
+              title="Replay this mood">
+              🔄
+            </button>
+            <button 
+              class="delete-button"
+              (click)="removeFromHistory(item.id)"
+              title="Remove from history">
+              ❌
+            </button>
+          </div>
+        </div>
+
+        <div *ngIf="item.playedSong" class="played-song-preview mb-2">
+          <span class="font-semibold text-purple-700 dark:text-purple-300">Played song:</span>
+          <span class="song-title dark:text-white">{{ item.playedSong.title }}</span>
+          <span class="song-artist dark:text-gray-400">by {{ item.playedSong.artist }}</span>
+        </div>
+
+        <div class="playlist-preview" *ngIf="item.playlist">
+          <div class="preview-header">
+            <span class="song-count dark:text-gray-400">{{ getSongCount(item.playlist.songs) }}</span>
+            <span class="confidence-badge" [style.background-color]="getConfidenceColor(item.playlist.confidence)">
+              {{ item.playlist.confidence }}% match
+            </span>
+          </div>
+          
+          <div class="songs-preview">
+            <div 
+              *ngFor="let song of item.playlist.songs.slice(0, 3)"
+              class="song-preview">
+              <span class="song-title dark:text-white">{{ song.title }}</span>
+              <span class="song-artist dark:text-gray-400">by {{ song.artist }}</span>
+            </div>
+            <div *ngIf="item.playlist.songs.length > 3" class="more-songs">
+              <span class="more-text dark:text-gray-400">+{{ item.playlist.songs.length - 3 }} more</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <span class="timestamp dark:text-gray-400">{{ formatDate(item.timestamp) }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

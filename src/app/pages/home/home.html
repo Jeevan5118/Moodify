@@ -1,0 +1,117 @@
+<app-header></app-header>
+
+<div class="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 dark:from-gray-900 dark:to-gray-800">
+  <div class="container mx-auto px-4 py-8">
+    
+    <!-- Welcome Section for Authenticated Users -->
+    <div *ngIf="user$ | async as user" class="text-center mb-12">
+      <h1 class="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-4">
+        Welcome back, {{ user.email ? user.email.split('@')[0] : 'User' }}! 🎵
+      </h1>
+      <p class="text-xl text-gray-600 dark:text-gray-300 mb-8">
+        How are you feeling today? Let's create the perfect playlist for your mood.
+      </p>
+
+      <!-- Search and Saved Playlists Bar -->
+      <div class="flex flex-col md:flex-row items-center justify-center gap-4 mb-8">
+        <div class="w-full md:w-1/2 relative">
+          <input
+            type="text"
+            placeholder="Search moods, songs, artists, or playlists..."
+            [(ngModel)]="searchTerm"
+            (input)="onSearch()"
+            class="w-full px-4 py-2 pl-10 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm">
+          <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">🔍</span>
+          <!-- Search Results Dropdown -->
+          <div *ngIf="searchResults.length > 0 && searchTerm.trim()" class="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto">
+            <div *ngFor="let result of searchResults" class="p-3 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer border-b border-gray-200 dark:border-gray-600 last:border-b-0" (click)="selectSearchResult(result)">
+              <div class="flex items-center space-x-3">
+                <div class="text-2xl">{{ result.mood.emoji }}</div>
+                <div class="flex-1 min-w-0">
+                  <!-- Mood/Playlist Title -->
+                  <p class="text-sm font-medium text-gray-900 dark:text-white truncate">
+                    {{ result.song ? result.song.title : result.mood.name }}
+                  </p>
+                  
+                  <!-- Artist (for songs) or Description (for moods) -->
+                  <p class="text-xs text-gray-600 dark:text-gray-400 truncate">
+                    {{ result.song ? result.song.artist : result.mood.description }}
+                  </p>
+                  
+                  <!-- Type badge with color coding -->
+                  <div class="flex items-center space-x-2 mt-1">
+                    <span class="text-xs px-2 py-1 rounded-full font-medium" 
+                          [ngClass]="{
+                            'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200': result.type === 'Available Mood',
+                            'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200': result.type === 'Song in Playlist',
+                            'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200': result.type === 'Your Mood History',
+                            'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200': result.type === 'Your Saved Playlist'
+                          }">
+                      {{ result.type }}
+                    </span>
+                    
+                    <!-- Song duration for songs -->
+                    <span *ngIf="result.song" class="text-xs text-gray-500 dark:text-gray-400">
+                      {{ result.song.duration }}
+                    </span>
+                  </div>
+                </div>
+                
+                <!-- Action indicator -->
+                <div class="text-gray-400 text-xs">
+                  <span *ngIf="result.type === 'Available Mood' || result.type === 'Song in Playlist'">→ Generate</span>
+                  <span *ngIf="result.type === 'Your Saved Playlist'">→ View</span>
+                  <span *ngIf="result.type === 'Your Mood History'">→ Replay</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- No results message -->
+            <div *ngIf="searchResults.length === 0 && searchTerm.trim()" class="p-4 text-center text-gray-500 dark:text-gray-400">
+              <p class="text-sm">No results found for "{{ searchTerm }}"</p>
+              <p class="text-xs mt-1">Try searching for moods, songs, or artists</p>
+            </div>
+          </div>
+        </div>
+        <a routerLink="/playlists" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg text-sm font-medium transition-colors shadow-lg whitespace-nowrap">Search</a>
+      </div>
+
+      <!-- Main App Components -->
+      <div class="max-w-4xl mx-auto space-y-8">
+        <app-mood-selector></app-mood-selector>
+        <app-playlist-display></app-playlist-display>
+      </div>
+    </div>
+
+    <!-- Welcome Section for Unauthenticated Users -->
+    <div *ngIf="!(user$ | async)" class="text-center py-20">
+      <div class="max-w-2xl mx-auto">
+        <div class="text-6xl mb-6">🎵</div>
+        <h1 class="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
+          Welcome to Moodify
+        </h1>
+        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8">
+          Your music companion that creates personalized playlists based on your mood.
+        </p>
+        
+        <div class="space-y-4">
+          <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">✨ Features</h3>
+            <ul class="text-gray-600 dark:text-gray-300 space-y-1">
+              <li>• Smart mood detection and playlist creation</li>
+              <li>• Save and revisit your favorite mood-based playlists</li>
+              <li>• Beautiful, intuitive interface with dark mode support</li>
+              <li>• Secure authentication with Firebase</li>
+            </ul>
+          </div>
+          
+          <button
+            (click)="goToLogin()"
+            class="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-lg text-lg font-medium transition-colors shadow-lg">
+            Get Started - Sign In
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
