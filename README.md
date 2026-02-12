@@ -1,4 +1,4 @@
-# MoodBoard AI 🎵
+# Moodify🎵
 
 A modern Angular 17+ web application that generates personalized music playlists based on your mood using AI-powered recommendations and Firebase integration.
 
@@ -252,4 +252,4 @@ If you encounter any issues or have questions:
 
 ---
 
-**Made with ❤️ and 🎵 by the MoodBoard AI Team**
+**Made with ❤️ and 🎵 by the Moodify Team**
