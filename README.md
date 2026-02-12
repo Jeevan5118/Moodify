@@ -6,8 +6,7 @@ A modern Angular 17+ web application that generates personalized music playlists
 
 ### 🎯 Core Features
 - **Mood Selection Interface**: Choose from 8 different moods with beautiful emoji buttons
-- **AI Playlist Generation**: Get personalized playlists with confidence scores
-- **Visual Feedback**: See your selected mood and confidence bar
+- **Mood Based Playlists**: Get personalized playlists
 - **Song Information**: View song titles, artists, durations, and YouTube links
 - **Firebase Integration**: Secure cloud storage and authentication
 - **User Authentication**: Sign up, sign in, and manage your account
